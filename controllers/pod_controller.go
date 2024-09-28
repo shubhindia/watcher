@@ -6,6 +6,7 @@ import (
 
 	"github.com/shubhindia/watcher/config"
 	"k8s.io/apimachinery/pkg/runtime"
+
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
@@ -21,6 +22,10 @@ type PodWatcherReconciler struct {
 }
 
 func (r *PodWatcherReconciler) Reconcile(ctx context.Context, req reconcile.Request) (reconcile.Result, error) {
+
+	if req.Namespace != r.Config.Namespace {
+		return reconcile.Result{Requeue: false}, nil
+	}
 	pod := &corev1.Pod{}
 	if err := r.Get(ctx, req.NamespacedName, pod); err != nil {
 		return reconcile.Result{}, client.IgnoreNotFound(err)
@@ -33,6 +38,6 @@ func (r *PodWatcherReconciler) Reconcile(ctx context.Context, req reconcile.Requ
 
 func (r *PodWatcherReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&corev1.Pod{}). // Watch for Pod updates
+		For(&corev1.Pod{}).
 		Complete(r)
 }
