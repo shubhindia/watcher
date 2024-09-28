@@ -12,7 +12,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
-// PodReconciler watches for pods and make sure the intended pod/s are always newer than the existing pods
+// PodWatcherReconciler watches for pods and make sure the intended pod/s are always newer than the existing pods
 type PodWatcherReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
