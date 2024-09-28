@@ -13,8 +13,6 @@ type ResourceConfig struct {
 
 type Config struct {
 	Namespace string           `yaml:"namespace"`
-	Include   []ResourceConfig `yaml:"include"`
-	Exclude   []ResourceConfig `yaml:"exclude"`
 	Newest    []ResourceConfig `yaml:"newest"`
 }
 
