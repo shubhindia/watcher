@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/shubhindia/watcher/config"
 	"github.com/shubhindia/watcher/controllers"
 	"k8s.io/apimachinery/pkg/runtime"
 
@@ -14,9 +15,14 @@ import (
 
 func main() {
 
-	// Create a new Scheme
-	scheme := runtime.NewScheme()
+	filename := "config.yaml"
+	config, err := config.LoadConfig(filename)
+	if err != nil {
+		fmt.Println("Error reading config file", err)
+		os.Exit(1)
+	}
 
+	scheme := runtime.NewScheme()
 	utilruntime.Must(corev1.AddToScheme(scheme))
 
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
@@ -30,6 +36,7 @@ func main() {
 	if err := (&controllers.PodWatcherReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
+		Config: config,
 	}).SetupWithManager(mgr); err != nil {
 		fmt.Println("Unable to create controller", err)
 		os.Exit(1)

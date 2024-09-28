@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/shubhindia/watcher/config"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
@@ -16,6 +17,7 @@ import (
 type PodWatcherReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
+	Config *config.Config
 }
 
 func (r *PodWatcherReconciler) Reconcile(ctx context.Context, req reconcile.Request) (reconcile.Result, error) {
@@ -24,6 +26,7 @@ func (r *PodWatcherReconciler) Reconcile(ctx context.Context, req reconcile.Requ
 		return reconcile.Result{}, client.IgnoreNotFound(err)
 	}
 
+	fmt.Printf("%+v", r.Config)
 	fmt.Printf("Pod %s/%s has been updated\n", pod.Namespace, pod.Name)
 	return reconcile.Result{}, nil
 }

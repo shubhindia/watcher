@@ -1,0 +1,11 @@
+include:
+  - Kind: Deployment
+    Name: ABC
+  - Kind: Deployment
+    Name: XYZ
+exclude:
+  - Kind: Deployment
+    Name: PQR
+newest:
+  - Kind: Deployment
+    Name: MNO
