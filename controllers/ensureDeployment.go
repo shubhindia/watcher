@@ -13,7 +13,7 @@ import (
 )
 
 // EnsureDeployment checks if the given pod is newer than the deployments and returns true if it is newer
-func (r *PodWatcherReconciler) EnsureDeployment(pod corev1.Pod, resource config.ResourceConfig) error {
+func (r *PodWatcherReconciler) ensureDeployment(pod corev1.Pod, resource config.ResourceConfig) error {
 
 	podList := &corev1.PodList{}
 	// ToDo: Optimise this code, it is not efficient
