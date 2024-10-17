@@ -48,7 +48,10 @@ func (r *PodWatcherReconciler) ensureDeployment(pod corev1.Pod, resource config.
 
 	for _, deploymentPod := range deploymentPods {
 		if pod.CreationTimestamp.After(deploymentPod.CreationTimestamp.Time) {
-			r.Delete(context.Background(), &deploymentPod)
+			err = r.Delete(context.Background(), &deploymentPod)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
