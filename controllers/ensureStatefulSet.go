@@ -47,7 +47,10 @@ func (r *PodWatcherReconciler) ensureStatefulSet(pod corev1.Pod, resource config
 	// Compare the pod with the statefulset pods
 	for _, stsPod := range stsPods {
 		if pod.CreationTimestamp.After(stsPod.CreationTimestamp.Time) {
-			r.Delete(context.Background(), &stsPod)
+			err = r.Delete(context.Background(), &stsPod)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
