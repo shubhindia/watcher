@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
@@ -15,10 +16,20 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 )
 
+var configFile string
+
+func init() {
+	flag.StringVar(&configFile, "config", "config.yaml", "Path to config file")
+	flag.Parse()
+	if configFile == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
+}
+
 func main() {
 
-	filename := "config.yaml"
-	config, err := config.LoadConfig(filename)
+	config, err := config.LoadConfig(configFile)
 	if err != nil {
 		fmt.Println("Error reading config file", err)
 		os.Exit(1)
